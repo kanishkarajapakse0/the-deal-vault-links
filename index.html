@@ -5,23 +5,165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Deal Vault | Official Links</title>
     <style>
-        body { font-family: 'Inter', sans-serif; background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+        /* Base Styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: #0f172a; 
+            color: white; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 40px 20px; 
+            min-height: 100vh;
+        }
+        
+        /* Profile Section */
         .profile-img { width: 96px; height: 96px; border-radius: 50%; border: 3px solid #38bdf8; margin-bottom: 16px; }
-        h1 { font-size: 1.5rem; margin-bottom: 8px; }
-        p { color: #94a3b8; margin-bottom: 32px; text-align: center; }
-        .link-card { width: 100%; max-width: 400px; background: #1e293b; border: 1px solid #334155; padding: 16px; border-radius: 12px; margin-bottom: 12px; text-decoration: none; color: white; text-align: center; transition: 0.2s; font-weight: 600; }
-        .link-card:hover { background: #38bdf8; color: #0f172a; transform: translateY(-2px); }
-        .badge { background: #ef4444; font-size: 0.7rem; padding: 2px 8px; border-radius: 99px; margin-left: 8px; vertical-align: middle; }
+        h1 { font-size: 1.5rem; margin-bottom: 8px; text-align: center; }
+        p { color: #94a3b8; margin-bottom: 24px; text-align: center; }
+
+        /* Search Bar Section */
+        .search-container { 
+            width: 100%; 
+            max-width: 400px; 
+            margin-bottom: 32px; 
+            background: #1e293b;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .search-label {
+            display: block;
+            font-size: 0.875rem;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .search-form { display: flex; gap: 8px; }
+        .search-input { 
+            flex: 1; 
+            padding: 12px 16px; 
+            border-radius: 8px; 
+            border: 1px solid #475569; 
+            background: #0f172a; 
+            color: white; 
+            outline: none; 
+            font-size: 1rem; 
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: #38bdf8; }
+        .search-input::placeholder { color: #64748b; }
+        .search-button { 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            border: none; 
+            background: #38bdf8; 
+            color: #0f172a; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: background 0.2s; 
+        }
+        .search-button:hover { background: #0ea5e9; }
+        .error-msg { 
+            color: #ef4444; 
+            font-size: 0.875rem; 
+            margin-top: 8px; 
+            display: none; 
+        }
+
+        /* Standard Links Section */
+        .links-wrapper { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 12px; }
+        .link-card { 
+            background: #1e293b; 
+            border: 1px solid #334155; 
+            padding: 16px; 
+            border-radius: 12px; 
+            text-decoration: none; 
+            color: white; 
+            text-align: center; 
+            transition: all 0.2s; 
+            font-weight: 600; 
+            display: block;
+        }
+        .link-card:hover { 
+            background: #38bdf8; 
+            color: #0f172a; 
+            transform: translateY(-2px); 
+            border-color: #38bdf8;
+        }
+        .badge { 
+            background: #ef4444; 
+            color: white;
+            font-size: 0.7rem; 
+            padding: 2px 8px; 
+            border-radius: 99px; 
+            margin-left: 8px; 
+            vertical-align: middle; 
+        }
     </style>
 </head>
 <body>
+
     <img src="logo.png" alt="The Deal Vault" class="profile-img">
     <h1>The Deal Vault 🔓</h1>
     <p>Hand-picked viral finds & massive savings.</p>
 
-    <a href="YOUR_AFFILIATE_LINK" target="_blank" class="link-card">Today's Featured Deal <span class="badge">LIVE</span></a>
-    <a href="YOUR_AFFILIATE_LINK" target="_blank" class="link-card">New User Welcome Deals ($0.01)</a>
-    <a href="YOUR_AFFILIATE_LINK" target="_blank" class="link-card">The Tech Vault (Best Gadgets)</a>
-    <a href="https://youtube.com/@TheDealVaultUS" target="_blank" class="link-card">Subscribe on YouTube</a>
+    <div class="search-container">
+        <label for="deal-code" class="search-label">Have a video code? Enter it below:</label>
+        <form class="search-form" id="search-form">
+            <input type="text" id="deal-code" class="search-input" placeholder="e.g. FIRE10,just type lowercase" autocomplete="off" required>
+            <button type="submit" class="search-button">Find Deal</button>
+        </form>
+        <div id="error-msg" class="error-msg">Code not found. Please check the video again!</div>
+    </div>
+
+    <div class="links-wrapper">
+        <a href="https://youtube.com/@TheDealVaultUS" class="link-card">Subscribe on YouTube</a>
+    </div>
+
+    <script>
+        // THE DATABASE: Map your avatar's spoken codes to your AliExpress links here.
+        //  Make sure all keys in this dictionary are UPPERCASE for reliable matching.
+        // START_DEALS
+        const dealLinks = {
+            "FIRE10": "https://s.click.aliexpress.com/e/_example_lighter_link"
+        };
+        // END_DEALS
+        const searchForm = document.getElementById('search-form');
+        const codeInput = document.getElementById('deal-code');
+        const errorMsg = document.getElementById('error-msg');
+
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent page reload
+            
+            // Clean the user input: remove spaces and make uppercase
+            const rawInput = codeInput.value.trim().toUpperCase();
+            
+            // Look up the code in our database
+            const targetUrl = dealLinks[rawInput];
+
+            if (targetUrl) {
+                // Code found! Hide error and redirect in the same tab 
+                // (better for mobile affiliate tracking in Instagram/YT browsers)
+                errorMsg.style.display = 'none';
+                codeInput.value = 'Redirecting...';
+                window.location.href = targetUrl;
+            } else {
+                // Code not found, show error
+                errorMsg.style.display = 'block';
+                // Shake animation effect for visual feedback
+                codeInput.style.transform = 'translateX(5px)';
+                setTimeout(() => codeInput.style.transform = 'translateX(-5px)', 100);
+                setTimeout(() => codeInput.style.transform = 'translateX(0)', 200);
+            }
+        });
+
+        // Hide error message when user starts typing again
+        codeInput.addEventListener('input', function() {
+            errorMsg.style.display = 'none';
+        });
+    </script>
 </body>
 </html>
